@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>车牌键盘</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <style type="text/css">
+        *{margin: 0; padding: 0;list-style:none;border:0; box-sizing:border-box;}
+        body,html{ background:#efefef; -webkit-touch-callout:none; -webkit-text-size-adjust: none;-webkit-overflow-scrolling:touch; }
+        li { list-style: none}
+        input,button{outline:none;-webkit-appearance: none}
+        a{-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-tap-highlight-color:rgba(255,0,0,0.5);outline:none;}
+        .brand{ width: 98%; margin: 0 auto; }
+        .brand-title { text-align: center; width: 100%; line-height: 50px; font-size: 18px; color:#333; overflow: hidden; font-family: "微软雅黑"}
+        .inpur-warp{background:#fff;margin:-5px auto 0 auto; overflow: hidden;padding:0;}
+        
+        .brand-input{ width: 100%;text-align: center; position: relative;}        
+        .input-box{height:44px; line-height: 42px; display: inline-block; margin: 40px auto 10px; width:94%;}
+        .input-box li{  width:30px; height:42px; line-height: 40px; border-radius: 5px;background:#fff; border:2px solid  #ddd; padding:0;
+             float:left; margin:0 .8%; width:12.716%; font-size: 18px; font-family:arial; font-weight: 700; }        
+        .input-box li.actv{ border-color:#4DA9F2; color:#4DA9F2;}
+        .input-box li.brand-province{ margin:0; border-radius: 5px 0 0 5px; border-right-width:1px;}  
+        
+        .input-box li.brand-city{ margin-left:0; border-radius: 0 5px 5px 0; border-left-width: 1px;margin-right:3%; position: relative; }
+        .input-box li.brand-city:after{display: inline-block; content: " ";position: absolute; top:16px;right:-32%; border-radius: 8px;
+         height:8px; width:8px; background: #ccc;}
+        .min-list li{ width:10.86%; }  
+        .min-list li.brand-city:after{right:-35%;}
+
+        .type-box{ display: inline-block; margin: 0 auto; overflow: hidden; border-radius: 5px 5px 0 0;width: 100%; background:#fff; }
+        .type-box span{line-height: 36px; height:36px;width:33.33%; font-size: 14px; background:#ddd; float: left; border-left: 1px solid rgba(255,255,255,.6);
+        overflow: hidden; }
+        .type-box span.tab-actv{background:#4DA9F2; color:#fff; text-align: center; }
+
+        .input-type{width:90%; height:37px; background:#fff; border:1px solid #ddd; border-radius: 5px; text-indent: 15px; line-height:37px;
+             font-size: 18px; color: #333; margin:26px auto; display: none; }
+
+        .prompt{ background:#fff; font-size: 13px; line-height: 30px; text-align: center; color:#f00; font-family: "Microsoft YaHei"; width: 100%; 
+        position: absolute; bottom:76px; left:0;}
+        .prompt span{ display: inline-block; padding:0 5px; line-height:30px; font-size: 15px; font-weight: bold; font-family: arial; }
+
+        .submitbox{ background: #fff; overflow: hidden; padding: 20px 0 36px; text-align: center;}
+        .submitbox button{ margin:0 auto; line-height: 36px; border-radius:5px; background:#49ca71; color: #fff; font-size: 14px; font-weight: bold; width:60%;}
+
+        #keyboard-box{ position: fixed; bottom:0; left:0; width: 100%; background: #4DA9F2;overflow: hidden;} 
+        /****省键******/
+        #keyboard-box ul{ background-color:#CED3D9; text-align:center; padding:4px 2px;font-size:14px;overflow:hidden;} 
+        #keyboard-box ul li{ float:left; width:10%; padding:2px;box-sizing: border-box;}
+        #keyboard-box ul li.li_close{  float:right; width:14%;}  
+        #keyboard-box ul li.li_close span{ background:#ACB3BB; font-weight: bold}
+        #keyboard-box ul li span{ display:block; background-color:#fff; border-radius:4px; box-shadow: 2px 2px 2px #888888; line-height:32px; padding-top:2px;
+         -moz-user-select: none; -webkit-user-select: none; -ms-user-select: none; }
+        #keyboard-box ul li span.disable{ background:#ddd;}
+        #keyboard-box ul li span:active{ background-color:#4DA9F2; color:#fff;}
+
+        #keyboard-box ul.ul_pro li:nth-child(33), #keyboard-box ul.ul_pro li:nth-child(32), #keyboard-box ul.ul_keybord li:nth-child(38),
+        #keyboard-box ul.ul_keybord li:nth-child(39),#keyboard-box ul.ul_other li:nth-child(80),#keyboard-box ul.ul_other li:nth-child(78){ width:13%;}
+        #keyboard-box ul.ul_pro li:nth-child(32),#keyboard-box ul.ul_keybord li:nth-child(38){ display:none;}
+        #keyboard-box ul.ul_pro li:nth-child(33) span,#keyboard-box ul.ul_pro li:nth-child(32) span,#keyboard-box ul.ul_keybord li:nth-child(38) span,
+        #keyboard-box ul.ul_keybord li:nth-child(39) span,#keyboard-box ul.ul_other li:nth-child(78) span,#keyboard-box ul.ul_other li:nth-child(80) span
+        { background:#409fea; color:#fff; font-weight: bold }
+        #keyboard-box ul.ul_pro li:nth-child(32) span,#keyboard-box ul.ul_keybord li:nth-child(39) span,#keyboard-box ul.ul_other li:nth-child(80) span
+        { background:#49ca71;}  
+
+         /**--数字字母键--**/
+        .ul_keybord{ background-color:#CED3D9; text-align:center; padding:4px 2px; font-size:14px; overflow: hidden;}      
+    
+        /*******其他键盘******/
+        .ul_other li:nth-child(79),.ul_keybord li:nth-child(30){ display: none;}
+        .ul_other li span:active{ background-color:#4DA9F2; color:#fff;}
+         
+    </style>
+</head>
+<body>
+	<div class="brand">		
+		<div class="brand-title">智付物联-输入车牌</div>
+		<div class="brand-input" id="brand-box">
+            <div class="type-box">
+                <span>蓝牌</span>
+                <span>绿牌</span>
+                <span>其它</span>
+            </div>
+            <div class="inpur-warp">
+                <ul class="input-box">
+                    <li class="brand-province"></li>
+                    <li class="brand-city"></li>			
+                    <li></li>
+                    <li></li>	               
+                    <li></li>
+                    <li></li>					
+                    <li></li>
+                    <li></li>
+                </ul> 
+            </div>            
+            <div class="submitbox">
+                <button type="button" id="submit">提交车牌号 </button>
+            </div>
+            <p id="prompt" class="prompt"></p>
+        </div>
+        
+       
+    </div>   
+
+    <script type="text/javascript" src="js/zepto.js"></script>
+    <script type="text/javascript" src="js/licenseplate.js?time=New Date()"></script>    
+    <script type="text/javascript"> 
+        timestamp(location.href);  
+        function timestamp(url){          
+            var timestamps = Date.parse(new Date());   
+            if(url.indexOf("?")<0){
+                url=url+"?timestamp="+timestamps;
+                location.href=url;             
+            }  
+        }
+      
+        $(function(){
+            var x=new $.licenseplate();   
+        })
+    // window.onload = function () { 
+        // //禁止苹果浏览器双击放大       
+    //     var lastTouchEnd = 0;
+    //     //document.documentElement.addEventListener('touchend', function (event) {
+    //     document.getElementById('keyboard-box').addEventListener('touchend', function (event) {
+    //     var now = Date.now();
+    //     if (now - lastTouchEnd <= 300) {
+    //         event.preventDefault();
+    //     }
+    //     lastTouchEnd = now;
+    //     }, false);
+
+    //     //禁止苹果浏览缩放  
+    //     document.addEventListener('gesturestart', function (e) {
+    //         e.preventDefault();
+    //     });
+    //     document.addEventListener('dblclick', function (e) {
+    //         e.preventDefault();
+    //     });
+    //     document.addEventListener('touchstart', function (event) {
+    //         if (event.touches.length > 1) {
+    //             event.preventDefault();
+    //         }
+    //     });
+    //     var lastTouchEnd = 0;
+    //     document.addEventListener('touchend', function (event) {
+    //         var now = (new Date()).getTime();
+    //         if (now - lastTouchEnd <= 300) {
+    //             event.preventDefault();
+    //         }
+    //         lastTouchEnd = now;
+    //     }, false);
+    // };
+    </script>
+
+</body>	
+</html>

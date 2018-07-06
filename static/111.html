@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>车牌键盘</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <style type="text/css">
+        *{margin: 0; padding: 0;list-style:none;border:0; box-sizing:border-box;}
+        body,html{ background:#efefef; -webkit-touch-callout:none; -webkit-text-size-adjust: none;-webkit-overflow-scrolling:touch; }
+        li { list-style: none}
+        input,button{outline:none;-webkit-appearance: none}
+        a{-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-tap-highlight-color:rgba(255,0,0,0.5);outline:none;}
+        .brand{ width:100%; margin: 0 auto; }
+        .brand-title { text-align: center;  line-height: 50px; font-size: 18px; color:#333; overflow: hidden; font-family:"Microsoft YaHei"; background: #fff; }
+
+        .paymentlist{margin: 0 auto; overflow: hidden; width:96%;  }
+        .paymentlist div{ margin:5px 0; background:#fff;}
+  
+
+        .prompt{ overflow: hidden; padding:20px; background:#fff;margin:2% ; text-align: center;}
+        .prompt span{ width: 70px; display: inline-block; margin: 10px auto; }
+        .prompt span img{width: 100%;}
+        .prompt p{ font-size: 12px; color: #666;  text-align: center; line-height: 30px; font-size: 14px;}
+
+        .submitbox{ background: #fff; overflow: hidden; padding: 20px 0; text-align: center;}
+        .submitbox button{ margin:0 auto; line-height: 36px; border-radius:5px; background:#49ca71; color: #fff; font-size: 14px; font-weight: bold; width:60%;}
+
+    </style>
+</head>
+<body>
+	<div class="brand">		
+		<div class="brand-title">智付物联-缴费成功</div>          
+        <div class="paymentlist"></div>
+       
+            <div class="prompt">
+                <span><img src="img/icon_05.png"/></span>
+                <h4 id="targetButton">缴费成功</h4>
+                <p>欢迎再次光临！</p>
+            </div>
+            
+        </div>   
+    </div>
+
+    <script type="text/javascript" src="js/zepto.js"></script>   
+    <script type="text/javascript"> 
+       
+     
+        $(function(){
+            const Button = document.getElementById("targetButton")
+            const clickEvent = (function() {
+            if ('ontouchstart' in document.documentElement === true)
+            return 'touchstart';
+            else
+            return 'click';
+            })();
+            
+            Button.addEventListener(clickEvent, e => {
+            console.log("things happened!")
+            })
+
+        
+        })
+   
+
+
+
+
+
+
+
+    </script>
+
+</body>	
+</html>

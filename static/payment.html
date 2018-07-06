@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>车牌键盘</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <style type="text/css">
+        *{margin: 0; padding: 0;list-style:none;border:0; box-sizing:border-box;}
+        body,html{ background:#efefef; -webkit-touch-callout:none; -webkit-text-size-adjust: none;-webkit-overflow-scrolling:touch; }
+        li { list-style: none}
+        input,button{outline:none;-webkit-appearance: none}
+        a{-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-tap-highlight-color:rgba(255,0,0,0.5);outline:none;}
+        .brand{ width:100%; margin: 0 auto; }
+        .brand-title { text-align: center;  line-height: 50px; font-size: 18px; color:#333; overflow: hidden; font-family:"Microsoft YaHei"; background: #fff; }
+
+        .paymentlist{margin: 0 auto; overflow: hidden; width:96%;  }
+        .paymentlist div{ margin:5px 0; background:#fff;}
+        .paymentlist h4{ font-size: 14px; color:#333; border-bottom:1px solid #efefef;line-height: 40px; padding:0 15px;}
+        .paymentlist ul{ padding:10px 15px;}
+        .paymenttxet li{line-height: 28px; font-size: 14px; color: #333; font-family: arial;}
+        .paymenttxet li:nth-child(1){ font-weight: bold;}
+        .paymenttxet li span{line-height: 28px; font-size: 14px; color: #666; display: inline-block; width: 90px; text-align: right; font-family: "Microsoft YaHei"; font-weight: normal;}
+        
+        .paymentway{ text-align: center;}
+        .paymentlist h4{ text-align: left;}
+        .paymentway ul{ overflow: hidden;display: inline-block; margin:10px auto; width:90%; padding:10px 0;}
+        .paymentway li{ width:23%;display: inline-block; margin:0 1%; float: left;font-size: 0; line-height: 0; }            
+        .paymentway li img{  width: 80%; margin:9% auto; opacity: .4; }
+
+        .paymentway li.actv { text-align:center;  border:1px solid #00c4ff;border-radius: 5px; }
+        .paymentway li.actv img {opacity:1; }
+
+        .prompt{ overflow: hidden;}
+        .prompt p{ font-size: 12px; color: #666; padding:15px; text-align: center;}
+
+        .submitbox{ background: #fff; overflow: hidden; padding: 20px 0; text-align: center;}
+        .submitbox button{ margin:0 auto; line-height: 36px; border-radius:5px; background:#49ca71; color: #fff; font-size: 14px; font-weight: bold; width:60%;}
+
+    </style>
+</head>
+<body>
+	<div class="brand">		
+		<div class="brand-title">智付物联-付款</div>          
+        <div class="paymentlist">
+            <div class="paymenttxet">
+                <h4><span>车辆信息</span></h4>
+                <ul class="">
+                    <li><span>车牌号：</span>粤B0739N</li>
+                    <li><span>入场时间：</span>2018-06-27 13:22:11</li>
+                    <li><span>出场时间：</span>2018-06-27 14:22:40</li>
+                    <li><span>缴费金额：</span>10.08</li>
+                </ul>
+            </div>
+            <div class="paymentway">
+                <h4><span>付款方式</span></h4>
+                <ul id="paymentway">
+                    <li><img src="img/icon_01.png"></li>
+                    <li><img src="img/icon_03.png"></li>
+                    <li><img src="img/icon_02.png"></li>                   
+                    <li><img src="img/icon_04.png"></li>
+                </ul>
+            </div>
+            <div class="submitbox">
+                <button type="button" id="submit">去付款 </button>
+            </div>
+            <div class="prompt">
+                <h4>温馨提示</h4>
+                <p>付款后15分钟内出场无需再次收费，超时按计费标准收费！</p>
+            </div>
+            
+        </div>   
+    </div>
+
+    <script type="text/javascript" src="js/zepto.js"></script>   
+    <script type="text/javascript"> 
+        var paytype=[" ","QQ","MicroMessenger","AlipayClient"]; 
+        var payIndex=0;
+        timestamp(location.href);  
+        function timestamp(url){          
+            var timestamps = Date.parse(new Date());   
+            if(url.indexOf("?")<0){
+                url=url+"?timestamp="+timestamps;
+                location.href=url;             
+            }  
+        }
+     
+        $(function(){
+            var userAgent = window.navigator.userAgent;    
+            // $(".prompt p").text(userAgent);
+            var paymentway= $("#paymentway").find("li");
+
+            setPay();
+            automaticPay();            
+
+            //点击选择支付方式
+            $(paymentway).on("touchstart",function(){
+                payIndex=$(this).index();
+                setPay();
+            })
+
+            //设置当前选中是支付方式
+            function setPay(){
+                $(paymentway).eq(payIndex).addClass("actv").siblings().removeClass("actv");
+                if(payIndex==0){
+                    $("#submit").text("去智付支付");           
+                }else if(payIndex==1){           
+                    $("#submit").text("去智QQ支付");
+                }else if(payIndex==2){                      
+                    $("#submit").text("去微信支付");
+                }else if(payIndex==3){                
+                    $("#submit").text("去支付宝支付");
+                }
+            }
+
+            //自动选择支付方式
+            function automaticPay(){         
+                $(paytype).each(function(i,e){              
+                    if(userAgent.indexOf(e)>0 && e!=" "){                    
+                        payIndex=i;
+                        setPay();                        
+                        return;
+                    }else if(e==" "){
+                        payIndex=0;
+                        setPay();                       
+                        return;
+                    }
+                })   
+            }
+           
+            //跳支付网关
+            $("#submit").on("touchstart",function(){
+                window.location.href="ok.html";
+                if(payIndex==0){
+                    alert("跳智付支付");                   
+                }else if(payIndex==1){
+                    alert("跳QQ支付");
+                    $("#submit").text("去智QQ支付");
+                }else if(payIndex==2){
+                    alert("跳微信支付");
+                    $("#submit").text("去微信支付");
+                   
+                }else if(payIndex==3){
+                    alert("跳支付宝支付");
+                    $("#submit").text("去支付宝支付");
+                }
+
+               
+            })       
+        })
+   
+
+
+
+
+
+
+
+    </script>
+
+</body>	
+</html>
