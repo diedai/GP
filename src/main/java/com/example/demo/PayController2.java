@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.itrus.util.sign.RSAWithSoftware;
-import com.nbtv.commons.http.HttpClientUtils;
+
+import gzh.http.HttpClientUtils;
+
 
 /**
  * 支付
@@ -19,9 +21,13 @@ import com.nbtv.commons.http.HttpClientUtils;
  */
 @RestController
 @EnableAutoConfiguration
-public class PayController {
+public class PayController2 {
+	public static void main(String[] args) {
+		doPay();
+	}
+	
 	@RequestMapping("/doPay")
-	String doPay() {
+	static String doPay() {
 		//输入数据
 		
 		//支付
@@ -58,9 +64,7 @@ public class PayController {
 				"TKolWg993ZjUQxX85FDwU8GPCHWoP5QNAy6dUQIpu9qyxvlBDFLuCq4CiF3/GVq8" + 
 				"GVVuSUGg2h4ytw==";
 		String channel_public_key="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTLA7IiZomz6LqIo8ehLMRU5ebBDRzhOq+uS/RJ8rAXbQDaQ7jb/kKwVY2kusbP777RMyszeUnlRnYCyZEcriAxeCzp3nF1df+JhHcUbpH60VIbJaaQU/dDdksgVKqm09PG5/bzMPahGmqbvdM1MT+/PqUGeUl9wxgcv1RMu3rvQIDAQAB";
-//		String url="https://www.c.api.dinpay.com/makeMerchantPayOrder";
-		String url="https://api.dindinsz.com/makeMerchantPayOrder";
-		
+		String url="https://www.c.api.dinpay.com/makeMerchantPayOrder";
 		
 		//计算签名
 		//拼接签名字符串
@@ -101,8 +105,9 @@ public class PayController {
 		
 		
 		//计算签名
+		String signValue = null;
 		try {
-			String signValue = RSAWithSoftware.signByPrivateKey(signStr, merchant_private_key);
+			signValue = RSAWithSoftware.signByPrivateKey(signStr, merchant_private_key);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -110,6 +115,8 @@ public class PayController {
 		
 		
 		//调通道
+		map.put("RSA-S", "RSA-S");
+		map.put("sign", signValue);
 		System.out.println(map);
 		String result = HttpClientUtils.getInstance().sendPostRequest(url, map,"UTF-8");
 		System.out.println(result);
