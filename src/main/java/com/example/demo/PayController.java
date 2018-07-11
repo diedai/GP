@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.itrus.util.sign.RSAWithSoftware;
-import com.nbtv.commons.http.HttpClientUtils;
+
+import gzh.http.HttpClientUtils;
 
 /**
  * 支付
