@@ -156,15 +156,23 @@
             })    
             
             //支付
+            var url="doPay";
+            var param="";
             $("#doPay").click(function(){
-            	alert("111");
-            	
-            	//提交订单数据
-            	
-            	//回调函数，弹起支付密码框
-            	var param="orderAmount=0.01,merchantOrderId=1531190748971,merchantName=智慧停车,businessType=22";
-            	window.dinpay.dinpayPayment(param);
+            	$.post(url,param,function(serverData){       		
+            		var merchant_order_id=serverData.merchant_order_id;
+            		alert(merchant_order_id);
+            		            	
+            		            	//提交订单数据
+            		            	
+            		            	//回调函数，弹起支付密码框
+            		            	//var param="orderAmount=0.01,merchantOrderId=1531190748971,merchantName=智慧停车,businessType=22";
+            		            	var param="orderAmount=0.01,merchantOrderId=" + merchant_order_id + ",merchantName=智慧停车,businessType=22,merchant_success_url=https://www.baidu.com";
+            		            	window.dinpay.dinpayPayment(param);
+            		            },"json");
             });
+            
+            
         })
    
 

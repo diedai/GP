@@ -15,6 +15,7 @@ import com.itrus.util.sign.RSAWithSoftware;
 
 import gzh.http.HttpClientUtils;
 import gzh.util.DateUtil;
+import gzh.util.PropertiesUtil;
 import gzh.util.StringUtil;
 
 @RestController
@@ -32,6 +33,10 @@ public class Example {
 		return "/index.html";
 	}
 	
+	// 读取配置文件
+		static String merchant_code = PropertiesUtil.get("merchant_code", "pay.properties");
+		static String merchant_private_key = PropertiesUtil.get("merchant_private_key", "pay.properties");
+		static String url = PropertiesUtil.get("url", "pay.properties");
 	/**
 	 * 
 	 * <pre>
@@ -59,21 +64,21 @@ public class Example {
 		String product_name = "停车费用";
 		String pub_code = "11111111";
 
-		String merchant_code = "4000059955"; //商家号
-		String merchant_private_key = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAOqAUbYudrW0sfiG"
-				+ "gYUmsbQqfOP7x7lt7RwvZrwKF5vaUbiCwJBmgBiH8NX5J1c+mVQozYotaWCBO7R+"
-				+ "45slPrekltbqae3mwi34GpoaM7LUU95TClgAt7qPpuQ6erooZVxRWjI2SuUZRUIx"
-				+ "UyUCrah5YZThTOPXfhE/4pTyEF35AgMBAAECgYBh2R0/WW/rLfS88NMGjjjEJp5q"
-				+ "OtsBwp6Xjifd+pATViuXQ+e52StGESMrBYWm39X2yffJ2l0ICaSyEehDCm16Qtc/"
-				+ "dY5IiQdEmCkgmWHpuY5PmHgOD9Xne0AYA11iiamnfD7dbr27zy2ItjBW3l6qvxFK"
-				+ "Hu4Gpk/5gNmbtOuSiQJBAPZjjLARzZuTXjyVqpjoZpM51Uv8iqJCzjiyChe3nwcb"
-				+ "7jNmPgSYrAIrpgJ2qklRkVYDlASlUbh8flHvIZQAusMCQQDzpg8vyW/kSG2XeuSV"
-				+ "souGPtpJnhh8nq6UjyfN0kXFctWxmXfu3N5xidZDtXgrzJr4MQnKb4lknM7t2NJA"
-				+ "NGCTAkBpGQ+i7wUoLpVM/H53mPJgLJQqRIASNLLohjE96qpgCu7xZ9Ree40ro9i9"
-				+ "Rkbe3XdEHGSgErCoJBpx8rH9As6nAkEAiytdHVSYHvLn9lBx5LfZTlL0aHxvTC9v"
-				+ "VNf4Sm5DACc5vHoGsV9jh8LNqlsrSwlRs1Z/WywedGPFJsJkRdwlFQJAIPOUm4qT"
-				+ "TKolWg993ZjUQxX85FDwU8GPCHWoP5QNAy6dUQIpu9qyxvlBDFLuCq4CiF3/GVq8" + "GVVuSUGg2h4ytw=="; //商家私钥
-		String url = "https://api.dindinsz.com/gateway/api/pubpay"; //通道请求地址
+//		String merchant_code = "4000059955"; //商家号
+//		String merchant_private_key = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAOqAUbYudrW0sfiG"
+//				+ "gYUmsbQqfOP7x7lt7RwvZrwKF5vaUbiCwJBmgBiH8NX5J1c+mVQozYotaWCBO7R+"
+//				+ "45slPrekltbqae3mwi34GpoaM7LUU95TClgAt7qPpuQ6erooZVxRWjI2SuUZRUIx"
+//				+ "UyUCrah5YZThTOPXfhE/4pTyEF35AgMBAAECgYBh2R0/WW/rLfS88NMGjjjEJp5q"
+//				+ "OtsBwp6Xjifd+pATViuXQ+e52StGESMrBYWm39X2yffJ2l0ICaSyEehDCm16Qtc/"
+//				+ "dY5IiQdEmCkgmWHpuY5PmHgOD9Xne0AYA11iiamnfD7dbr27zy2ItjBW3l6qvxFK"
+//				+ "Hu4Gpk/5gNmbtOuSiQJBAPZjjLARzZuTXjyVqpjoZpM51Uv8iqJCzjiyChe3nwcb"
+//				+ "7jNmPgSYrAIrpgJ2qklRkVYDlASlUbh8flHvIZQAusMCQQDzpg8vyW/kSG2XeuSV"
+//				+ "souGPtpJnhh8nq6UjyfN0kXFctWxmXfu3N5xidZDtXgrzJr4MQnKb4lknM7t2NJA"
+//				+ "NGCTAkBpGQ+i7wUoLpVM/H53mPJgLJQqRIASNLLohjE96qpgCu7xZ9Ree40ro9i9"
+//				+ "Rkbe3XdEHGSgErCoJBpx8rH9As6nAkEAiytdHVSYHvLn9lBx5LfZTlL0aHxvTC9v"
+//				+ "VNf4Sm5DACc5vHoGsV9jh8LNqlsrSwlRs1Z/WywedGPFJsJkRdwlFQJAIPOUm4qT"
+//				+ "TKolWg993ZjUQxX85FDwU8GPCHWoP5QNAy6dUQIpu9qyxvlBDFLuCq4CiF3/GVq8" + "GVVuSUGg2h4ytw=="; //商家私钥
+//		String url = "https://api.dindinsz.com/gateway/api/pubpay"; //通道请求地址
 
 		// 计算签名
 		// 拼接签名字符串
@@ -126,14 +131,17 @@ public class Example {
 		//解析返回数据
 		Map<String,String> map1 = StringUtil.xmlStrToMap(result);
 		String json = map1.get("prepay_id");
+		merchant_order_id = map1.get("order_no");
 
 		// 输出数据
 		String status = "0";
 		String invokeCurrentPage="t";
 		StringBuilder sb11 = new StringBuilder();
-		sb11.append("status").append(status). //状态
-		append("invokeCurrentPage").append(invokeCurrentPage). //是否在当前页面调用
-		append("json").append(json); //调app支付密码框需要的参数
+		sb11.append("{\"status\":").append("\"").append(status).append("\","). //状态
+		append("\"invokeCurrentPage\":").append("\"").append(invokeCurrentPage).append("\","). //是否在当前页面调用
+		append("\"merchant_order_id\":").append("\"").append(merchant_order_id).append("\","). //商家订单号
+		append("\"json\":").append("\"").append(json).append("\"}"); //调app支付密码框需要的参数
+		logger.info("sb11:" + sb11);
 		
 		return sb11.toString();
 	}
