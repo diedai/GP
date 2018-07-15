@@ -84,6 +84,13 @@
                 location.href=url;             
             }  
         }
+        
+        //获取智付钱包app的用户id
+        var appAccId;
+        function setAccountId(appAccId){
+        	appAccId = appAccId;
+        	alert(appAccId);
+        }
      
         $(function(){
             var userAgent = window.navigator.userAgent;    
@@ -151,8 +158,12 @@
             //支付
             $("#doPay").click(function(){
             	alert("111");
-//             	var param;
-//             	dinpayPayment(param);
+            	
+            	//提交订单数据
+            	
+            	//回调函数，弹起支付密码框
+            	var param="orderAmount=0.01,merchantOrderId=1531190748971,merchantName=智慧停车,businessType=22";
+            	window.dinpay.dinpayPayment(param);
             });
         })
    

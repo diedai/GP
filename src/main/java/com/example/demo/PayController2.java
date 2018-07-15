@@ -1,10 +1,18 @@
 package com.example.demo;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +21,7 @@ import com.itrus.util.sign.RSAWithSoftware;
 
 import gzh.http.HttpClientUtils;
 import gzh.util.DateUtil;
+import gzh.util.PropertiesUtil;
 import gzh.util.StringUtil;
 
 /**
@@ -24,26 +33,49 @@ import gzh.util.StringUtil;
 @RestController
 @EnableAutoConfiguration
 public class PayController2 {
+	static Logger logger = LogManager.getLogger("PayController2");
+
+	// 读取配置文件
+	static String merchant_code = PropertiesUtil.get("merchant_code", "pay.properties");
+	static String merchant_private_key = PropertiesUtil.get("merchant_private_key", "pay.properties");
+	static String url = PropertiesUtil.get("url", "pay.properties");
+
 	public static void main(String[] args) {
 		// doPay();
 
 		// query();
 
-		testParse();
+		// testParse();
+		
+		//jdk properties
+//		logger.info("merchant_code:" + merchant_code);
+//		logger.info("merchant_private_key:" + merchant_private_key);
+//		logger.info("url:" + url);
+		
+		//apache common properties
+		Configuration config = null;
+		try {
+			config = new PropertiesConfiguration("pay.properties");
+		} catch (ConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String merchant_code = config.getString("merchant_code");
+		logger.info("merchant_code:" + merchant_code);
 	}
 
 	/**
 	 * 
 	 * <pre>
 	 * 测试-xml格式字符串转map
-	 * @author gzh
+	 * &#64;author gzh
 	 * </pre>
 	 */
 	public static void testParse() {
 		String result = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><dinpay><response><retCode>SUCCESS</retCode><retMsg></retMsg><is_success>T</is_success><merchant_code>4000059955</merchant_code><order_amount>0.01</order_amount><order_no>1531190748971</order_no><order_time>2018-07-10 10:45:48</order_time><prepay_id>ddbillmerpay/9f8c8cd6d3d6d1a2</prepay_id><sign>URyVD4OhzX/mrmkYhiLRRpn8JMVjRcIN7VO/DdDNmNWK5ajjoH7qGYPKJJe5pfM/ispXWf3KIR0JOt+iTzC9u5G5cGDa2S72ItXdKX77St2aM9qXdN1wiyyh5kvKPSJQoRVGRJV8svnPt7giP8DIbr3prL9CK9syyA9Fa8Qz/sE=</sign><sign_type>RSA-S</sign_type><trade_time>2018-07-10 10:45:49</trade_time></response></dinpay>";
 		Map<String, String> resMap = null;
 		try {
-//			resMap = StringUtil.xmlStrToMap(result, false, null);
+			// resMap = StringUtil.xmlStrToMap(result, false, null);
 			resMap = StringUtil.xmlStrToMap(result);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -148,8 +180,8 @@ public class PayController2 {
 	 * &#64;author gzh
 	 * </pre>
 	 */
-	@RequestMapping("/doPay")
-	static String doPay() {
+	@RequestMapping("/doPay2")
+	static String doPay2() {
 		// 输入数据
 
 		// 支付

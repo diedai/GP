@@ -21,8 +21,8 @@ import gzh.http.HttpClientUtils;
 @RestController
 @EnableAutoConfiguration
 public class PayController {
-	@RequestMapping("/doPay")
-	String doPay() {
+	@RequestMapping("/doPay1")
+	String doPay1() {
 		//输入数据
 		
 		//支付
