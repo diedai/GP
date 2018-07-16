@@ -5,38 +5,48 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.boot.*;
-import org.springframework.boot.autoconfigure.*;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+//
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.*;
+//
+//import com.itrus.util.sign.RSAWithSoftware;
 
-import com.itrus.util.sign.RSAWithSoftware;
-
+import decrypt.RSAWithSoftware;
+//import decrypt.RSAWithSoftware;
 import gzh.http.HttpClientUtils;
 import gzh.util.DateUtil;
-import gzh.util.PropertiesUtil;
 import gzh.util.StringUtil;
 
 @RestController
-@EnableAutoConfiguration
-public class Example {
+@PropertySource(value = "classpath:pay.properties") 
+public class Example{
 	private static final Logger logger = LogManager.getLogger("Example");
 	
-	@RequestMapping("/")
-	String home() {
-		return "Hello World!";
-	}
+//	@Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+//        return application.sources(Example.class);
+//    }
 	
-	@RequestMapping("/index")
-	String index() {
-		return "/index.html";
-	}
+	@Value("${merchant_code}")
+	private String merchantCode;
 	
+	@Value("${merchant_private_key}")
+	private String merchantPrivateKey;
+	
+	@Value("${url}")
+	private String url;
+
 	// 读取配置文件
-		static String merchant_code = PropertiesUtil.get("merchant_code", "pay.properties");
-		static String merchant_private_key = PropertiesUtil.get("merchant_private_key", "pay.properties");
-		static String url = PropertiesUtil.get("url", "pay.properties");
+		
+		
+//		static String merchant_code = PropertiesUtil.get("merchant_code", "com/example/demo/pay.properties");
+//		static String merchant_private_key = PropertiesUtil.get("merchant_private_key", "com/example/demo/pay.properties");
+//		static String url = PropertiesUtil.get("url", "com/example/demo/pay.properties");
 	/**
 	 * 
 	 * <pre>
@@ -46,7 +56,7 @@ public class Example {
 	 * </pre>
 	 */
 	@RequestMapping("/doPay")
-	static String doPay() {
+	public String doPay() {
 		// 输入数据
 
 		// 支付
@@ -83,15 +93,15 @@ public class Example {
 		// 计算签名
 		// 拼接签名字符串
 		StringBuilder sb = new StringBuilder();
-		sb.append("service_type").append(service_type).append("merchant_code").append(merchant_code)
+		sb.append("service_type").append(service_type).append("merchant_code").append(merchantCode)
 				.append("input_charset").append(input_charset).append("notify_url").append(notify_url)
 				.append("return_url").append(return_url).append("interface_version").append(interface_version)
 				.append("merchant_name").append(merchant_name).append("merchant_order_id").append(merchant_order_id)
 				.append("order_time").append(order_time).append("order_amount").append(order_amount)
-				.append("product_name").append(product_name).append("key").append(merchant_private_key);
+				.append("product_name").append(product_name).append("key").append(merchantPrivateKey);
 		// 排序
 		Map<String, Object> map = new TreeMap<String, Object>(); // 拼接
-		map.put("merchant_code", merchant_code);
+		map.put("merchant_code", merchantCode);
 		map.put("notify_url", notify_url);
 		map.put("interface_version", interface_version);
 		map.put("input_charset", input_charset);
@@ -116,7 +126,7 @@ public class Example {
 		String signValue = null;
 		try {
 			logger.info("signStr:" + signStr);
-			signValue = RSAWithSoftware.signByPrivateKey(signStr, merchant_private_key);
+			signValue = RSAWithSoftware.signByPrivateKey(signStr, merchantPrivateKey);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -145,11 +155,4 @@ public class Example {
 		
 		return sb11.toString();
 	}
-
-	public static void main(String[] args) throws Exception {
-		SpringApplication.run(Example.class, args);
-	}
-	
-	
-
 }
